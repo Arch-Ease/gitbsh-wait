@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Gitbsh demo dashboard for developer productivity, backlog, CI/CD, and agent markdown streaming." />
+    <title>Gitbsh DevFlow Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="mode-switcher" aria-label="Experience mode">
+      <span class="mode-label">Experience</span>
+      <button class="mode-option is-active" type="button" data-mode="human">Human UI</button>
+      <button class="mode-option" type="button" data-mode="agent">Agent MD Stream</button>
+    </div>
+
+    <main id="humanApp" class="app-shell" aria-label="Gitbsh dashboard demo">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand-row">
+          <div class="brand-mark" aria-hidden="true">gb</div>
+          <div>
+            <strong>Gitbsh</strong>
+            <span>DevFlow demo</span>
+          </div>
+        </div>
+
+        <nav class="nav-stack" aria-label="Dashboard sections">
+          <button class="nav-item is-active" type="button" data-view="dashboard"><span>Command center</span><small>Home</small></button>
+          <button class="nav-item" type="button" data-view="backlog"><span>Backlog</span><small id="backlogCount">0</small></button>
+          <button class="nav-item" type="button" data-view="repositories"><span>Repositories</span><small>6</small></button>
+          <button class="nav-item" type="button" data-view="pulls"><span>Pull requests</span><small id="prCount">0</small></button>
+          <button class="nav-item" type="button" data-view="cicd"><span>CI/CD</span><small id="buildCount">0</small></button>
+          <button class="nav-item" type="button" data-view="incidents"><span>Incidents</span><small id="incidentCount">0</small></button>
+          <button class="nav-item" type="button" data-view="demo"><span>Demo app</span><small>Live</small></button>
+        </nav>
+
+        <section class="sidebar-card">
+          <p class="eyebrow">WIP sprint sample</p>
+          <h2>Vector release</h2>
+          <div class="progress-shell" aria-label="Sprint completion">
+            <span style="width: 68%"></span>
+          </div>
+          <p>68% complete - freeze in 2 days</p>
+        </section>
+
+        <section class="team-strip" aria-label="Online teammates">
+          <p class="eyebrow">On deck</p>
+          <div class="avatar-row">
+            <span title="Maya">M</span>
+            <span title="Ari">A</span>
+            <span title="Nikhil">N</span>
+            <span title="Jules">J</span>
+            <button type="button" data-open-task>+</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="crumb">Prototype / Simulated workspace / WIP</p>
+            <h1 id="viewTitle">Command center</h1>
+          </div>
+          <label class="search-box">
+            <span>Search</span>
+            <input id="globalSearch" type="search" placeholder="Find tasks, repos, PRs, builds..." autocomplete="off" />
+          </label>
+          <button class="ghost-btn" type="button" data-agent-shortcut>Stream report</button>
+          <button class="primary-btn" type="button" data-open-task>Create task</button>
+        </header>
+
+        <section id="dashboardView" class="view-panel is-active" aria-labelledby="viewTitle">
+          <aside class="demo-notice" aria-label="Demo status">
+            <span>Demo prototype</span>
+            <p>This is a simulated product surface. Dotted rails mark WIP areas, mock data, and flows that would connect to real repositories, issues, and CI providers in production.</p>
+          </aside>
+
+          <div class="hero-grid">
+            <article class="next-card">
+              <div class="card-topline">
+                <span class="signal-dot"></span>
+                <span>Suggested next action - simulated</span>
+              </div>
+              <h2 id="nextActionTitle"></h2>
+              <p id="nextActionSummary"></p>
+              <div id="nextActionMeta" class="meta-row"></div>
+              <div class="action-row">
+                <button class="primary-btn" type="button" data-focus-backlog>Open backlog</button>
+                <button class="soft-btn" type="button" data-open-task>Capture new task</button>
+              </div>
+            </article>
+
+            <article class="velocity-card">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Demo velocity</p>
+                  <h2>Weekly velocity</h2>
+                </div>
+                <span class="trend-pill positive">+18%</span>
+              </div>
+              <div id="velocitySparkline" class="sparkline" aria-label="Velocity sparkline"></div>
+              <div class="velocity-stats">
+                <span><strong>46</strong> points</span>
+                <span><strong>14</strong> merged PRs</span>
+                <span><strong>92%</strong> green builds</span>
+              </div>
+            </article>
+          </div>
+
+          <section id="statsGrid" class="stats-grid" aria-label="Workspace metrics"></section>
+
+          <section class="split-layout">
+            <article class="panel contribution-panel">
+              <div class="section-heading">
+              <div>
+                  <p class="eyebrow">Simulated contributions</p>
+                  <h2>Speed and shipping rhythm</h2>
+                </div>
+                <div class="segmented" role="group" aria-label="Contribution range">
+                  <button class="is-active" type="button" data-range="weekly">Week</button>
+                  <button type="button" data-range="monthly">Month</button>
+                </div>
+              </div>
+              <div id="contributionChart" class="contribution-chart"></div>
+            </article>
+
+            <article class="panel focus-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Focus queue</p>
+                  <h2>What needs attention</h2>
+                </div>
+                <button class="soft-btn small" type="button" data-view-shortcut="pulls">Review PRs</button>
+              </div>
+              <div id="focusQueue" class="focus-list"></div>
+            </article>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Board</p>
+                <h2>Backlog to done</h2>
+              </div>
+              <div class="button-row">
+                <button class="soft-btn small" type="button" data-view-shortcut="backlog">Expand board</button>
+                <button class="soft-btn small" type="button" data-open-task>New card</button>
+              </div>
+            </div>
+            <div id="taskBoard" class="task-board" aria-live="polite"></div>
+          </section>
+
+          <section class="panel demo-section">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Demo app section - WIP</p>
+                <h2>GitHub alternative simulation</h2>
+              </div>
+              <button class="primary-btn small" type="button" data-view-shortcut="demo">Open full simulation</button>
+            </div>
+            <div id="demoPreview" class="demo-preview"></div>
+          </section>
+        </section>
+
+        <section id="backlogView" class="view-panel" aria-label="Backlog">
+          <div class="panel page-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Planning</p>
+                <h2>Backlog intelligence</h2>
+              </div>
+              <button class="primary-btn small" type="button" data-open-task>Create task</button>
+            </div>
+            <div id="backlogDeepDive" class="deep-grid"></div>
+          </div>
+        </section>
+
+        <section id="repositoriesView" class="view-panel" aria-label="Repositories">
+          <div class="panel page-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Source control</p>
+                <h2>Repository fleet</h2>
+              </div>
+              <button class="soft-btn small" type="button" data-agent-scenario="release">Stream release notes</button>
+            </div>
+            <div id="repoGrid" class="repo-grid"></div>
+          </div>
+        </section>
+
+        <section id="pullsView" class="view-panel" aria-label="Pull requests">
+          <div class="panel page-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Review</p>
+                <h2>Pull requests and code review</h2>
+              </div>
+              <button class="soft-btn small" type="button" data-agent-scenario="issues">Stream issue triage</button>
+            </div>
+            <div id="pullRequestList" class="timeline-list"></div>
+          </div>
+        </section>
+
+        <section id="cicdView" class="view-panel" aria-label="CI/CD">
+          <div class="panel page-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Automation</p>
+                <h2>CI/CD control tower</h2>
+              </div>
+              <button class="soft-btn small" type="button" data-agent-scenario="cicd">Stream CI/CD</button>
+            </div>
+            <div id="pipelineGrid" class="pipeline-grid"></div>
+          </div>
+        </section>
+
+        <section id="incidentsView" class="view-panel" aria-label="Incidents">
+          <div class="panel page-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Reliability</p>
+                <h2>Incidents and service health</h2>
+              </div>
+              <button class="soft-btn small" type="button" data-agent-scenario="incident">Stream incident plan</button>
+            </div>
+            <div id="incidentGrid" class="incident-grid"></div>
+          </div>
+        </section>
+
+        <section id="demoView" class="view-panel" aria-label="Demo app simulation">
+          <div class="panel page-panel demo-lab">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Demo simulation - WIP</p>
+                <h2>Complete GitHub alternative demo</h2>
+              </div>
+              <div class="button-row">
+                <button class="soft-btn small" type="button" data-agent-scenario="issues">Agent issues</button>
+                <button class="soft-btn small" type="button" data-agent-scenario="cicd">Agent CI/CD</button>
+              </div>
+            </div>
+            <div id="demoLab" class="demo-lab-grid"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <section id="agentApp" class="agent-app" hidden aria-label="Agent markdown stream mode">
+      <div class="agent-frame">
+        <header class="agent-header">
+          <div>
+            <p class="eyebrow">Agent mode</p>
+            <h1>Markdown stream only</h1>
+          </div>
+          <button class="soft-btn" type="button" data-mode="human">Return to Human UI</button>
+        </header>
+        <p class="agent-copy">Demo stream mode hides the UI on purpose. Issues, backlog, incidents, and CI/CD updates stream as Markdown so agents and CLIs can consume the same simulated operating picture.</p>
+        <div class="agent-controls" role="group" aria-label="Agent stream scenarios">
+          <button class="is-active" type="button" data-stream="issues">Issues</button>
+          <button type="button" data-stream="cicd">CI/CD</button>
+          <button type="button" data-stream="release">Release</button>
+          <button type="button" data-stream="incident">Incident</button>
+        </div>
+        <pre id="markdownStream" class="markdown-stream" aria-live="polite"></pre>
+      </div>
+    </section>
+
+    <div id="taskModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+      <div class="modal-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Capture</p>
+            <h2 id="taskModalTitle">Create a new task</h2>
+          </div>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Close task modal">&times;</button>
+        </div>
+        <form id="taskForm" class="task-form">
+          <label>
+            Task title
+            <input name="title" required minlength="4" placeholder="e.g. Add branch protection policy simulator" />
+          </label>
+          <label>
+            Repository
+            <select name="repo">
+              <option>forge/web</option>
+              <option>forge/api</option>
+              <option>forge/agents</option>
+              <option>forge/runner</option>
+            </select>
+          </label>
+          <div class="form-row">
+            <label>
+              Status
+              <select name="status">
+                <option value="backlog">Backlog</option>
+                <option value="inProgress">In progress</option>
+                <option value="review">Review</option>
+              </select>
+            </label>
+            <label>
+              Priority
+              <select name="priority">
+                <option>Normal</option>
+                <option>High</option>
+                <option>Urgent</option>
+                <option>Low</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              Owner
+              <input name="owner" placeholder="Maya" value="Maya" />
+            </label>
+            <label>
+              Estimate
+              <input name="estimate" type="number" min="1" max="13" value="3" />
+            </label>
+          </div>
+          <label>
+            Notes
+            <textarea name="summary" rows="3" placeholder="Why this matters and what done looks like"></textarea>
+          </label>
+          <button class="primary-btn" type="submit">Add to workspace</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
